@@ -23,7 +23,7 @@ namespace HueLamps
 		{
 			try
 			{
-				var json = await nwf.RegisterName("Hue", "Kenneth&Yorick");
+				var json = await nwf.RegisterName("Hue", "Remco");
 				json = json.Replace("[", "").Replace("]", "");
 				JObject o = JObject.Parse(json);
 				string id = o["success"]["username"].ToString();
@@ -37,16 +37,16 @@ namespace HueLamps
 
 		public async void SetLightState(Light l)
 		{
-			var json = await nwf.SetLightInfo(l.ID, $"{{\"on\": {((l.IsOn) ? "true" : "false")}}}");
+			var json = await nwf.SetLightInfo(l.id, $"{{\"on\": {((l.on) ? "true" : "false")}}}");
 			Debug.WriteLine(json);
 		}
 
 		public async void SetLightValues(Light l)
 		{
-			if (l.IsOn)
+			if (l.on)
 			{
-				Debug.WriteLine(l.Hue);
-				var json = await nwf.SetLightInfo(l.ID, $"{{\"bri\": {l.Brightness},\"hue\": {(l.Hue)},\"sat\": {l.Saturation}}}");
+				Debug.WriteLine(l.hue);
+				var json = await nwf.SetLightInfo(l.id, $"{{\"bri\": {l.bri},\"hue\": {(l.hue)},\"sat\": {l.sat}}}");
 				Debug.WriteLine(json);
 			}
 
@@ -63,7 +63,7 @@ namespace HueLamps
 				{
 					var light = o["" + i.Key];
 					var state = light["state"];
-					alllights.Add(new Light() { api = this, ID = Int32.Parse(i.Key), Brightness = (int)state["bri"], IsOn = ((string)state["on"]).ToLower() == "true" ? true : false, Hue = (int)state["hue"], Saturation = (int)state["sat"], Name = (string)light["name"], Type = (string)light["type"] });
+					alllights.Add(new Light() { api = this, id = Int32.Parse(i.Key), bri = (int)state["bri"], on = ((string)state["on"]).ToLower() == "true" ? true : false, hue = (int)state["hue"], sat = (int)state["sat"], name = (string)light["name"], type = (string)light["type"] });
 					//Debug.WriteLine("Added light number " + i + " " + state["on"]);
 				}
 
