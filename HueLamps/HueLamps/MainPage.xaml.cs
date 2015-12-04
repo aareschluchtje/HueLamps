@@ -25,6 +25,7 @@ namespace HueLamps
 	{
 		public static ApplicationDataContainer LOCAL_SETTINGS = ApplicationData.Current.LocalSettings;
         private APIfixer api = null;
+        private ObservableCollection<Lamp> totallamps;
 
 		public MainPage()
 		{
@@ -37,13 +38,22 @@ namespace HueLamps
 
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private async void button_Click(object sender, RoutedEventArgs e)
         {
             api.Register();
-            ObservableCollection<Lamp> allights = new ObservableCollection<Lamp>();
-            var lamps = api.GetAllLights(allights);
+            totallamps = new ObservableCollection<Lamp>();
+            ObservableCollection<Lamp> lamps = await api.GetAllLights(totallamps);
             listBox.Items.Clear();
-            
+            foreach (Lamp lamp in lamps)
+            {
+                listBox.Items.Add("Lamp " + lamp.id);
+                lamp.on = true;
+                api.SetLightState(lamp);
+                lamp.hue = 46920; //hue 0 - 65280
+                lamp.bri = 254; //brightness 0 - 254
+                lamp.sat = 254; //saturation 0 - 254
+                api.SetLightValues(lamp);
+            }
         }
     }
 }
