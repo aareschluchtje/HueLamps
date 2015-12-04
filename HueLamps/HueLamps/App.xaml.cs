@@ -22,6 +22,8 @@ namespace HueLamps
     /// </summary>
     sealed partial class App : Application
     {
+
+        private APIfixer api;
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -33,6 +35,7 @@ namespace HueLamps
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.api = new APIfixer(new Networkfixer());
         }
 
         /// <summary>

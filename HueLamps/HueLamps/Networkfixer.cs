@@ -127,6 +127,5 @@ namespace HueLamps
 				await new MessageDialog("Error while setting username. ….").ShowAsync();
 			return response;
 		}
-
 	}
 }

@@ -17,6 +17,7 @@ namespace HueLamps
 		public APIfixer(Networkfixer nwf)
 		{
 			this.nwf = nwf;
+            Register();
 		}
 
 		public async Task Register()
