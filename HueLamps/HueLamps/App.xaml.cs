@@ -35,7 +35,6 @@ namespace HueLamps
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            this.api = new APIfixer(new Networkfixer());
         }
 
         /// <summary>

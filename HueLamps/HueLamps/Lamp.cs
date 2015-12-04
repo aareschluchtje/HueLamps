@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HueLamps
 {
-    public class Light
+    public class Lamp
     {
         public int sat;
         public int hue;
