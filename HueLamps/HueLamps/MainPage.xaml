@@ -3,14 +3,57 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:HueLamps"
+    xmlns:convert="using:HueLamps.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="35,36,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" TextChanged="textBox_TextChanged"/>
-        <Button x:Name="button" Content="Register" HorizontalAlignment="Left" Margin="128,36,0,0" VerticalAlignment="Top" Click="button_Click"/>
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="495" Margin="35,106,0,0" VerticalAlignment="Top" Width="289" IsSynchronizedWithCurrentItem="False" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <RelativePanel Grid.Row="0">
+            <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="25,25,0,15" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" TextChanged="textBox_TextChanged"/>
+            <Button x:Name="RegisterButton" Content="Register" HorizontalAlignment="Left" Margin="125,25,0,15" VerticalAlignment="Top" Click="button_Click"/>
+        </RelativePanel>
+
+        <RelativePanel Grid.Row="1">
+            <StackPanel Margin="120, 0,0,0">
+                <TextBlock FontSize="20">Select a Light</TextBlock>
+            </StackPanel>
+        </RelativePanel>
+
+        <RelativePanel Grid.Row="2">
+            <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="250" Margin="25,15,0,15" VerticalAlignment="Top" Width="310" IsSynchronizedWithCurrentItem="False" />
+        </RelativePanel>
+
+        <RelativePanel Grid.Row="3">
+            <StackPanel Margin="20, 5, 0, 0">
+                <ToggleSwitch Margin="0,0,0,0" Toggled="ToggleSwitch_Toggled" IsOn="{Binding IsOn}">
+                    <ToggleSwitch.OffContent>Off</ToggleSwitch.OffContent>
+                    <ToggleSwitch.OnContent>On</ToggleSwitch.OnContent>
+                </ToggleSwitch>
+            </StackPanel>
+
+            <StackPanel Margin="20,50,-300,0">
+                <TextBlock FontSize="20">Hue</TextBlock>
+                <Slider Maximum="65535" Value="{Binding Hue, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released"/>
+            </StackPanel>
+
+            <StackPanel Margin="20,110,-300,0">
+                <TextBlock FontSize="20">Saturation</TextBlock>
+                <Slider Maximum="254" Value="{Binding Saturation, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released" />
+            </StackPanel>
+
+            <StackPanel Margin="20,170,-300,0">
+                <TextBlock FontSize="20">Brightness</TextBlock>
+                <Slider Maximum="254" Value="{Binding Brightness, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released"/>
+            </StackPanel>
+        </RelativePanel>
 
     </Grid>
 </Page>
