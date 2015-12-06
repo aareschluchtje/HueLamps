@@ -24,8 +24,14 @@ namespace HueLamps
 	public sealed partial class MainPage : Page
 	{
 		public static ApplicationDataContainer LOCAL_SETTINGS = ApplicationData.Current.LocalSettings;
-		private APIfixer api = null;
+		private APIfixer api;
 		private ObservableCollection<Lamp> totallamps;
+		private bool _justSelected = false;
+
+		private int SelectedID
+		{
+			get { return Int32.Parse(LightListBox.SelectedItem.ToString().Substring(5)); }
+		}
 
 		public MainPage()
 		{
@@ -33,26 +39,83 @@ namespace HueLamps
 			api = new APIfixer(new Networkfixer());
 		}
 
-		private void textBox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-
-		}
-
 		private async void button_Click(object sender, RoutedEventArgs e)
 		{
 			api.Register();
 			totallamps = new ObservableCollection<Lamp>();
 			ObservableCollection<Lamp> lamps = await api.GetAllLights(totallamps);
-			listBox.Items.Clear();
+			LightListBox.Items.Clear();
 			foreach (Lamp lamp in lamps)
 			{
-				listBox.Items.Add("Lamp " + lamp.id);
-				lamp.on = true;
+				LightListBox.Items.Add("Lamp " + lamp.ID);
+				lamp.On = false;
 				api.SetLightState(lamp);
-				lamp.hue = 46920; //hue 0 - 65280
-				lamp.bri = 254; //brightness 0 - 254
-				lamp.sat = 254; //saturation 0 - 254
+				lamp.Hue = 0; //hue 0 - 65280
+				lamp.Bri = 254; //brightness 0 - 254
+				lamp.Sat = 254; //saturation 0 - 254
 				api.SetLightValues(lamp);
+			}
+		}
+
+		private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+		{
+			if (_justSelected == false)
+			{
+				foreach (Lamp lamp in totallamps)
+				{
+					if (lamp.ID == SelectedID)
+					{
+						lamp.Toggle();
+					}
+				}
+			}
+		}
+
+		private void onListSelectionChanged(object sender, RoutedEventArgs e)
+		{
+			_justSelected = true;
+			if (totallamps != null)
+			{
+				foreach (Lamp lamp in totallamps)
+				{
+					if (lamp.ID == SelectedID)
+					{
+						OnOffButton.IsOn = lamp.On;
+						HueSlider.Value = lamp.Hue;
+						SatSlider.Value = lamp.Sat;
+						BriSlider.Value = lamp.Bri;
+					}
+				}
+			}
+			_justSelected = false;
+
+		}
+
+		private void Slider_Released(object sender, PointerRoutedEventArgs e)
+		{
+			if(_justSelected == false)
+			{
+				if (totallamps != null)
+				{
+					foreach (Lamp lamp in totallamps)
+					{
+						if (lamp.ID == SelectedID)
+						{
+							if (sender == HueSlider)
+							{
+								lamp.Hue = (int)HueSlider.Value;
+							}
+							else if (sender == SatSlider)
+							{
+								lamp.Sat = (int)SatSlider.Value;
+							}
+							else if (sender == BriSlider)
+							{
+								lamp.Bri = (int)BriSlider.Value;
+							}
+						}
+					}
+				}			
 			}
 		}
 	}

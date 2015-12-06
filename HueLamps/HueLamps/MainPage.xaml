@@ -17,8 +17,7 @@
         </Grid.RowDefinitions>
 
         <RelativePanel Grid.Row="0">
-            <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="25,25,0,15" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" TextChanged="textBox_TextChanged"/>
-            <Button x:Name="RegisterButton" Content="Register" HorizontalAlignment="Left" Margin="125,25,0,15" VerticalAlignment="Top" Click="button_Click"/>
+            <Button x:Name="RegisterButton" Content="Register" HorizontalAlignment="Left" Margin="25,25,0,15" VerticalAlignment="Top" Click="button_Click"/>
         </RelativePanel>
 
         <RelativePanel Grid.Row="1">
@@ -28,12 +27,12 @@
         </RelativePanel>
 
         <RelativePanel Grid.Row="2">
-            <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="250" Margin="25,15,0,15" VerticalAlignment="Top" Width="310" IsSynchronizedWithCurrentItem="False" />
+            <ListBox x:Name="LightListBox" HorizontalAlignment="Left" Height="250" Margin="25,15,0,15" VerticalAlignment="Top" Width="310" SelectionChanged="onListSelectionChanged"/>
         </RelativePanel>
 
         <RelativePanel Grid.Row="3">
             <StackPanel Margin="20, 5, 0, 0">
-                <ToggleSwitch Margin="0,0,0,0" Toggled="ToggleSwitch_Toggled" IsOn="{Binding IsOn}">
+                <ToggleSwitch Name ="OnOffButton" Margin="0,0,0,0" Toggled="ToggleSwitch_Toggled" IsOn="{Binding IsOn}">
                     <ToggleSwitch.OffContent>Off</ToggleSwitch.OffContent>
                     <ToggleSwitch.OnContent>On</ToggleSwitch.OnContent>
                 </ToggleSwitch>
@@ -41,17 +40,17 @@
 
             <StackPanel Margin="20,50,-300,0">
                 <TextBlock FontSize="20">Hue</TextBlock>
-                <Slider Maximum="65535" Value="{Binding Hue, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released"/>
+                <Slider Name="HueSlider" Maximum="65535" Value="{Binding Hue, Mode=TwoWay}"  PointerCaptureLost="Slider_Released"/>
             </StackPanel>
 
             <StackPanel Margin="20,110,-300,0">
                 <TextBlock FontSize="20">Saturation</TextBlock>
-                <Slider Maximum="254" Value="{Binding Saturation, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released" />
+                <Slider Name="SatSlider" Maximum="254" Value="{Binding Saturation, Mode=TwoWay}" PointerCaptureLost="Slider_Released" />
             </StackPanel>
 
             <StackPanel Margin="20,170,-300,0">
                 <TextBlock FontSize="20">Brightness</TextBlock>
-                <Slider Maximum="254" Value="{Binding Brightness, Mode=TwoWay}" ValueChanged="Slider_ValueChanged" PointerCaptureLost="Slider_Released"/>
+                <Slider Name="BriSlider" Maximum="254" Value="{Binding Brightness, Mode=TwoWay}"  PointerCaptureLost="Slider_Released"/>
             </StackPanel>
         </RelativePanel>
 

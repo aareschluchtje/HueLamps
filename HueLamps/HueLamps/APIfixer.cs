@@ -17,7 +17,7 @@ namespace HueLamps
 		public APIfixer(Networkfixer nwf)
 		{
 			this.nwf = nwf;
-            
+			
 		}
 
 		public async Task Register()
@@ -38,16 +38,16 @@ namespace HueLamps
 
 		public async void SetLightState(Lamp l)
 		{
-			var json = await nwf.SetLightInfo(l.id, $"{{\"on\": {((l.on) ? "true" : "false")}}}");
+			var json = await nwf.SetLightInfo(l.ID, $"{{\"on\": {((l.On) ? "true" : "false")}}}");
 			Debug.WriteLine(json);
 		}
 
 		public async void SetLightValues(Lamp l)
 		{
-			if (l.on)
+			if (l.On)
 			{
-				Debug.WriteLine(l.hue);
-				var json = await nwf.SetLightInfo(l.id, $"{{\"bri\": {l.bri},\"hue\": {(l.hue)},\"sat\": {l.sat}}}");
+				Debug.WriteLine(l.Hue);
+				var json = await nwf.SetLightInfo(l.ID, $"{{\"bri\": {l.Bri},\"hue\": {(l.Hue)},\"sat\": {l.Sat}}}");
 				Debug.WriteLine(json);
 			}
 
@@ -61,9 +61,17 @@ namespace HueLamps
 				JObject o = JObject.Parse(json);
 				foreach (var i in o)
 				{
-					var light = o["" + i.Key];
+					var light = o[i.Key];
 					var state = light["state"];
-					alllights.Add(new Lamp() { api = this, id = Int32.Parse(i.Key), bri = (int)state["bri"], on = ((string)state["on"]).ToLower() == "true" ? true : false, hue = (int)state["hue"], sat = (int)state["sat"], name = (string)light["name"], type = (string)light["type"] });
+					alllights.Add(new Lamp(this,
+											Int32.Parse(i.Key),
+											(int)state["bri"],
+											((string)state["on"]).ToLower() == "true" ? true : false,
+											(int)state["hue"],
+											(int)state["sat"],
+											(string)light["name"],
+											(string)light["type"]));
+
 					Debug.WriteLine("Added light number " + i + " " + state["on"]);
 				}
 
@@ -83,7 +91,7 @@ namespace HueLamps
 				Debug.WriteLine(e.StackTrace);
 				Debug.WriteLine("Could not get all lights.");
 			}
-            return alllights;
+			return alllights;
 		}
 	}
 }
